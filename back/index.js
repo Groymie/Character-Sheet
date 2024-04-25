@@ -44,7 +44,7 @@ app.post("/api/characters", async (req, res) => {
 app.put("/api/characters/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const character = await character.findOneAndUpdate({ _id: id }, req.body);
+    const character = await characters.findOneAndUpdate({ _id: id }, req.body);
     if (!character) {
       return res
         .status(404)
@@ -59,7 +59,7 @@ app.put("/api/characters/:id", async (req, res) => {
 app.delete("/api/characters/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const character = await characters.findByIdAndDelete({ id });
+    const character = await characters.findByIdAndDelete({ _id: id });
     if (!character) {
       return res.status(404).json({
         message: `Character with ID: ${id} does not exist in the database`,

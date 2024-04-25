@@ -17,7 +17,7 @@ const proficienciesSchema = new mongoose.Schema({
 const characterSchema = new mongoose.Schema({
   proficiencies: {
     type: proficienciesSchema,
-    required: true,
+    // required: true,
   },
 });
 
