@@ -12,13 +12,32 @@ export const CharacterwizardContext = createContext();
 
 // This is the container for everything else. The character sheet essentially.
 function App() {
+  const createSetupArr = (num) => {
+    const setupArr = [];
+    for (let i = 0; i < num; i++) {
+      setupArr.push("");
+    }
+    return setupArr;
+  };
+
   const [race, setRace] = useState("");
   const [characterClass, setCharacterClass] = useState("");
+  const [skillChoices, setSkillChoices] = useState(createSetupArr);
+  const [character, setCharacter] = useState(null);
 
   return (
     <div className="App">
       <CharacterwizardContext.Provider
-        value={{ race, setRace, characterClass, setCharacterClass }}
+        value={{
+          race,
+          setRace,
+          characterClass,
+          setCharacterClass,
+          skillChoices,
+          setSkillChoices,
+          character,
+          setCharacter,
+        }}
       >
         <CharacterWizardMenu />
         <Routes>

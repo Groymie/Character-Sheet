@@ -21,52 +21,96 @@ function CharacterWizardClassDetails() {
 
   return (
     <div className="CharacterWizardClassDetails">
-      {characterClassData ? (
-        <Proficiencies data={characterClassData} />
-      ) : (
-        <div></div>
-      )}
+      {characterClassData ? <Skills data={characterClassData} /> : <div></div>}
     </div>
   );
 }
 
-const Proficiencies = ({ data }) => {
-  const numProficiencyChoices = data.proficiency_choices[0].choose;
-  const proficiencyChoicesComponentArray = Array.from(
-    { length: numProficiencyChoices },
-    (_, index) => <ProficiencyChoices data={data} key={index} />
+const Skills = ({ data }) => {
+  // const createSetupArr = (num) => {
+  //   const setupArr = [];
+  //   for (let i = 0; i < num; i++) {
+  //     setupArr.push("");
+  //   }
+  //   return setupArr;
+  // };
+  const numSkillChoices = data.proficiency_choices[0].choose;
+  const { skillChoices, setSkillChoices } = useContext(CharacterwizardContext);
+  const handleChange = (index, newSkillChoice) => {
+    const updatedSkillChoices = [...skillChoices];
+    updatedSkillChoices[index] = newSkillChoice;
+    setSkillChoices(updatedSkillChoices);
+  };
+  console.log("here are the skill choices: ", skillChoices);
+
+  const proficienciesObject = {};
+  const { character, setCharacter } = useContext(CharacterwizardContext);
+
+  const handleCharacterCreation = () => {
+    proficienciesObject["skills"] = skillChoices;
+    setCharacter(proficienciesObject);
+  };
+
+  // handleCharacterCreation();
+
+  console.log("here is the character: ", character);
+
+  const skillChoicesComponentArray = Array.from(
+    { length: numSkillChoices },
+    (_, index) => (
+      <SkillChoices
+        data={data}
+        choices={skillChoices}
+        onChange={(e) => handleChange(index, e.target.value)}
+        key={index}
+      />
+    )
   );
+
   const findEquipment = () => {
-    let weapons = "";
-    let armor = "";
+    let weaponProficiencies = "";
+    let armorProficiencies = "";
+    const weaponProficienciesArr = [];
+    const armorProficienciesArr = [];
+
     const pArray = data.proficiencies;
     const regex1 = /\b[wW]eapons\b/;
     const regex2 = /\b[aA]rmor\b/;
     for (let i = 0; i < data.proficiencies.length; i++) {
       const proficiencyName = pArray[i].name;
       if (regex1.test(proficiencyName)) {
-        weapons = weapons.concat(", ", proficiencyName);
+        weaponProficienciesArr.push(proficiencyName);
+        weaponProficiencies = weaponProficiencies.concat(", ", proficiencyName);
       } else if (regex2.test(proficiencyName)) {
-        armor = armor.concat(", ", proficiencyName);
+        armorProficienciesArr.push(proficiencyName);
+        armorProficiencies = armorProficiencies.concat(", ", proficiencyName);
       }
     }
-    return [weapons, armor];
+    proficienciesObject["weapons"] = weaponProficienciesArr;
+    proficienciesObject["armor"] = armorProficienciesArr;
+    // console.log(proficienciesObject);
+    return [weaponProficiencies, armorProficiencies];
   };
 
   const findSavingThrows = () => {
     let savingThrows = "";
+    const savingThrowsArr = [];
+
     const stArray = data.saving_throws;
     for (let i = 0; i < stArray.length; i++) {
       const savingThrowName = stArray[i].name;
       // console.log("from loop: ", savingThrowName);
+      savingThrowsArr.push(savingThrowName);
       savingThrows = savingThrows.concat(", ", savingThrowName);
     }
     // console.log("before return: ", savingThrows);
+    proficienciesObject["savingThrows"] = savingThrowsArr;
     return savingThrows;
   };
 
   return (
     <div>
+      <button onClick={handleCharacterCreation}>Submit Character</button>
       <p>
         <strong>Weapon:</strong>
         {findEquipment()[0]}
@@ -83,17 +127,12 @@ const Proficiencies = ({ data }) => {
         <strong>SavingThrows:</strong>
         {findSavingThrows()}
       </p>
-      {proficiencyChoicesComponentArray}
+      {skillChoicesComponentArray}
     </div>
   );
 };
 
-const ProficiencyChoices = ({ data }) => {
-  const [proficiencyChoice, setProficiencyChoice] = useState(null);
-  const handleChange = (e) => {
-    setProficiencyChoice(e.target.value);
-  };
-
+const SkillChoices = ({ data, onChange }) => {
   const proficiencyChoicesArray = data.proficiency_choices[0].from.options;
 
   return (
@@ -104,8 +143,8 @@ const ProficiencyChoices = ({ data }) => {
         </p>
         <select
           name="choices"
-          value={proficiencyChoice}
-          onChange={handleChange}
+          // value={skillChoice}
+          onChange={onChange}
           id=""
         >
           <option>--Select a skill--</option>

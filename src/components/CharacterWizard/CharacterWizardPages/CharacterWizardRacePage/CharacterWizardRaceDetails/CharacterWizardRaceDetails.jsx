@@ -6,7 +6,7 @@ import "./characterWizardRaceDetails.css";
 
 function CharacterWizardRaceDetails() {
   const [raceData, setRaceData] = useState();
-  const race = useContext(CharacterwizardContext);
+  const { race } = useContext(CharacterwizardContext);
   const selectedRace = race;
   console.log("selected race: ", selectedRace);
   let { id } = useParams();
@@ -15,11 +15,10 @@ function CharacterWizardRaceDetails() {
   useEffect(() => {
     console.log("lalala: ", race);
     const data_URL = `https://www.dnd5eapi.co/api/races/${id}`;
-    console.log(data_URL);
     axios.get(data_URL).then((res) => {
-      console.log("here is the response object", res);
+      // console.log("here is the response object", res);
       setRaceData(res.data);
-      console.log(`here is the race data ${raceData}`);
+      // console.log(`here is the race data ${raceData}`);
     });
     // async function fetchData() {}
 
@@ -34,9 +33,9 @@ function CharacterWizardRaceDetails() {
 }
 
 const AbilityScoreIncreases = ({ data }) => {
-  console.log("here is the data: ", data);
+  // console.log("here is the data: ", data);
   const abilityScoreIncreaseArray = data.ability_bonuses;
-  console.log("blahblahblah: ", abilityScoreIncreaseArray);
+  // console.log("blahblahblah: ", abilityScoreIncreaseArray);
 
   return (
     <>
