@@ -46,9 +46,23 @@ const Skills = ({ data }) => {
   const proficienciesObject = {};
   const { character, setCharacter } = useContext(CharacterwizardContext);
 
-  const handleCharacterCreation = () => {
+  const handleCharacterCreation = async (e) => {
+    e.preventDefault();
     proficienciesObject["skills"] = skillChoices;
-    setCharacter(proficienciesObject);
+    const char = { proficiencies: proficienciesObject };
+    setCharacter(char);
+    try {
+      // Make a POST request to your backend API
+      const response = await axios.post(
+        "http://localhost:3000/api/characters",
+        character
+      );
+      console.log("Registration successful:", response.data);
+      // Handle success (e.g., show a success message or redirect)
+    } catch (error) {
+      console.error("Error registering user:", error);
+      // Handle error (e.g., display validation errors)
+    }
   };
 
   // handleCharacterCreation();
