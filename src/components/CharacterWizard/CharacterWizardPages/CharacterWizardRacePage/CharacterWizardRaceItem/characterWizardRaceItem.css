@@ -1,0 +1,17 @@
+.CharacterWizardRaceItem {
+  display: flex;
+  justify-content: start;
+  margin-top: 2px;
+  border: solid grey;
+}
+
+/* .add-race {
+  display: inline-block;
+} */
+
+.add-race {
+  align-self: center;
+  background: none;
+  border: none;
+  width: 40px;
+}

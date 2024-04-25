@@ -1,0 +1,10 @@
+.CharacterWizardRaceDetails {
+  border: solid lightslategray;
+  margin-top: 10px;
+}
+
+.AbilityScoreIncrease {
+  border: solid lightslategray;
+  margin: 2px;
+  padding: 2px;
+}
